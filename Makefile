@@ -1,4 +1,4 @@
-DIFF ?= diff --strip-trailing-cr -u
+DIFF ?= diff
 PANDOC ?= pandoc
 
 test: test-asciidoc test-html test-md
