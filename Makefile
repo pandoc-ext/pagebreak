@@ -1,18 +1,11 @@
+FILTER_FILE := $(wildcard *.lua)
 DIFF ?= diff
 PANDOC ?= pandoc
 
-test: test-asciidoc test-html test-md
+test: test-adoc test-html test-ms
 
-test-asciidoc:
-	@$(PANDOC) --lua-filter=pagebreak.lua sample.md --to asciidoc | \
-	  $(DIFF) expected.adoc -
+test-%: $(FILTER_FILE) test/input.md test/test-%.yaml
+	@$(PANDOC) --defaults test/test-$*.yaml | \
+	  $(DIFF) test/expected.$* -
 
-test-html:
-	@$(PANDOC) --lua-filter=pagebreak.lua --wrap=none sample.md | \
-	  $(DIFF) expected.html -
-
-test-md:
-	@$(PANDOC) -t ms --lua-filter=pagebreak.lua sample.md | \
-	  $(DIFF) expected.ms -
-
-.PHONY: test test-asciidoc test-html test-md
+.PHONY: test

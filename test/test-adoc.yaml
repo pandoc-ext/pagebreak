@@ -1,0 +1,4 @@
+input-files: [test/input.md]
+to: asciidoc
+filters:
+  - pagebreak.lua
