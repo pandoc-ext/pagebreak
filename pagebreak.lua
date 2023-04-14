@@ -29,21 +29,22 @@ local default_pagebreaks = {
   odt = '<text:p text:style-name="Pagebreak"/>'
 }
 
-local function pagebreak_from_config (meta)
+local function pagebreak_from_config (config)
   local pagebreak = default_pagebreaks
-  local html_class =
-    (meta.newpage_html_class and stringify(meta.newpage_html_class))
-    or os.getenv 'PANDOC_NEWPAGE_HTML_CLASS'
+  local html_class = config['html-class']
+    and stringify(config['html-class'])
+    or os.getenv 'PANDOC_PAGEBREAK_HTML_CLASS'
   if html_class and html_class ~= '' then
     pagebreak.html = string.format('<div class="%s"></div>', html_class)
   end
 
-  local odt_style =
-    (meta.newpage_odt_style and stringify(meta.newpage_odt_style))
-    or os.getenv 'PANDOC_NEWPAGE_ODT_STYLE'
+  local odt_style = config['odt-style']
+    and stringify(config['odt-style'])
+    or os.getenv 'PANDOC_PAGEBREAK_ODT_STYLE'
   if odt_style and odt_style ~= '' then
     pagebreak.odt = string.format('<text:p text:style-name="%s"/>', odt_style)
   end
+
   return pagebreak
 end
 
