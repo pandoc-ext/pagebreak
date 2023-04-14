@@ -13,10 +13,6 @@ the following is sufficient:
 
     Paragraph after page break
 
-
-Usage
------
-
 Fully supported output formats are:
 
 - AsciiDoc / Asciidoctor,
@@ -33,11 +29,56 @@ reference document (see below).
 In all other formats, the page break is represented using the
 form feed character.
 
+
+Usage
+-----
+
+The filter modifies the internal document representation; it can
+be used with many publishing systems that are based on pandoc.
+
+### Plain pandoc
+
+Pass the filter to pandoc via the `--lua-filter` (or `-L`) command
+line option.
+
+    pandoc --lua-filter abstract-section.lua ...
+
+### Quarto / R Markdown
+
+The use of this filter with either Quarto or R Markdown is
+discouraged, as both systems ship with their own fork of this
+extension. Use those instead.
+
+Note also that Quarto allows to use the [`{{ pagebreak }}`
+short-code][shortcode] to insert page breaks.
+
+[shortcode]: https://quarto.org/docs/authoring/markdown-basics.html#page-breaks
+
 Configuration
 -------------
 
 The filter can be configured through the `pagebreak` metadata
-field. Currently supported options:
+field.
+
+Example config in YAML frontmatter:
+
+``` yaml
+---
+pagebreak:
+  break-on:
+    # Treat paragraphs that contain just a form feed
+    # character as pagebreak markers.
+    form-feed: true
+
+  # Use a div with this class instead of hard-coded CSS
+  html-class: 'page-break'
+
+  # ODT style used for pagebreak paragraphs
+  odt-style: 'Pagebreak'
+---
+```
+
+Currently supported options:
 
 - `break-on.form-feed`: boolean value indicating whether
   the filter should replace paragraphs that contains nothing but
@@ -60,6 +101,8 @@ field. Currently supported options:
   }
   ```
 
+  Note that this will also be used for EPUB output.
+
 - `odt-style`: To use with ODT you must create a reference ODT
   with a named paragraph style called `Pagebreak` (or whatever you
   set the metadata field `odt-style` or the environment variable
@@ -71,26 +114,6 @@ field. Currently supported options:
   extra vertical space, and you probably want that space to go at
   the bottom of the page before the break rather than at the top
   of the page after the break!)
-
-
-Example config in YAML frontmatter:
-
-``` yaml
----
-pagebreak:
-  break-on:
-    # Treat paragraphs that contain just a form feed
-    # character as pagebreak markers.
-    form-feed: true
-
-  # Use a div with this class instead of hard-coded CSS
-  html-class: 'page-break'
-
-  # ODT style used for pagebreak paragraphs
-  odt-style: 'Pagebreak'
----
-```
-
 
 Alternative syntax
 ------------------
