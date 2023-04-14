@@ -2,3 +2,8 @@ input-files: [test/input.md]
 to: asciidoc
 filters:
   - pagebreak.lua
+
+metadata:
+  pagebreak:
+    break-on:
+      form-feed: true

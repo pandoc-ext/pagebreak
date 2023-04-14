@@ -113,7 +113,7 @@ function Pandoc (doc)
   return doc:walk {
     RawBlock = latex_pagebreak(raw_pagebreak),
     -- Replace paragraphs that contain just a form feed char.
-    Para = (break_on['form-feed'] ~= false)
+    Para = break_on['form-feed']
       and ascii_pagebreak(raw_pagebreak)
       or nil
   }

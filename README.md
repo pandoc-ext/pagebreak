@@ -40,7 +40,9 @@ field. Currently supported options:
 
 - `pagebreak.break-on.form-feed`: boolean value indicating whether
   the filter should replace paragraphs that contains nothing but
-  form feed characters with page breaks. Defaults to `true`.
+  form feed characters with page breaks. Enabling option can have
+  a significant performance impact for large documents and is
+  therefore *disabled by default*.
 
 Example config in YAML frontmatter:
 
@@ -48,9 +50,9 @@ Example config in YAML frontmatter:
 ---
 pagebreak:
   break-on:
-    # do not treat paragraphs that contain nothing but a form feed
+    # Treat paragraphs that contain just a form feed
     # character as pagebreak markers.
-    form-feed: false
+    form-feed: true
 ---
 ```
 
