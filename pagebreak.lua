@@ -18,7 +18,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 local stringify = (require 'pandoc.utils').stringify
 
 --- configs – these are populated in the Meta filter.
-local pagebreak = {
+local default_pagebreaks = {
   asciidoc = '<<<\n\n',
   context = '\\page',
   epub = '<p style="page-break-after: always;"> </p>',
@@ -29,7 +29,8 @@ local pagebreak = {
   odt = '<text:p text:style-name="Pagebreak"/>'
 }
 
-local function pagebreaks_from_config (meta)
+local function pagebreak_from_config (meta)
+  local pagebreak = default_pagebreaks
   local html_class =
     (meta.newpage_html_class and stringify(meta.newpage_html_class))
     or os.getenv 'PANDOC_NEWPAGE_HTML_CLASS'
@@ -43,10 +44,11 @@ local function pagebreaks_from_config (meta)
   if odt_style and odt_style ~= '' then
     pagebreak.odt = string.format('<text:p text:style-name="%s"/>', odt_style)
   end
+  return pagebreak
 end
 
 --- Return a block element causing a page break in the given format.
-local function newpage(format)
+local function newpage(format, pagebreak)
   if format:match 'asciidoc' then
     return pandoc.RawBlock('asciidoc', pagebreak.asciidoc)
   elseif format == 'context' then
@@ -74,36 +76,41 @@ local function is_newpage_command(command)
     or command:match '^\\pagebreak%{?%}?$'
 end
 
--- Filter function called on each RawBlock element.
-local function latex_pagebreak (el)
+-- Returns a filter function for RawBlock elements, checking for LaTeX
+-- pagebreak/newpage commands; returns `nil` when the target format is latex.
+local function latex_pagebreak (pagebreak)
   -- Don't do anything if the output is TeX
   if FORMAT:match 'tex$' then
     return nil
   end
-  -- check that the block is TeX or LaTeX and contains only
-  -- \newpage or \pagebreak.
-  if el.format:match 'tex' and is_newpage_command(el.text) then
-    -- use format-specific pagebreak marker. FORMAT is set by pandoc to
-    -- the targeted output format.
-    return newpage(FORMAT)
+  return function (el)
+    -- check that the block is TeX or LaTeX and contains only
+    -- \newpage or \pagebreak.
+    if el.format:match 'tex' and is_newpage_command(el.text) then
+      -- use format-specific pagebreak marker. FORMAT is set by pandoc to
+      -- the targeted output format.
+      return pagebreak
+    end
+    -- otherwise, leave the block unchanged
+    return nil
   end
-  -- otherwise, leave the block unchanged
-  return nil
 end
 
 -- Turning paragraphs which contain nothing but a form feed
 -- characters into line breaks.
-local function ascii_pagebreak (el)
-  if #el.content == 1 and el.content[1].text == '\f' then
-    return newpage(FORMAT)
+local function ascii_pagebreak (raw_pagebreak)
+  return function (el)
+    if #el.content == 1 and el.content[1].text == '\f' then
+      return raw_pagebreak
+    end
   end
 end
 
 function Pandoc (doc)
-  local meta = doc.meta
-  pagebreaks_from_config(meta)
+  local pagebreak = pagebreak_from_config(doc.meta)
+  local raw_pagebreak = newpage(FORMAT, pagebreak)
   return doc:walk {
-    RawBlock = latex_pagebreak,
-    Para = ascii_pagebreak
+    RawBlock = latex_pagebreak(raw_pagebreak),
+    Para = ascii_pagebreak(raw_pagebreak)
   }
 end
