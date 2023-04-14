@@ -33,6 +33,26 @@ reference document (see below).
 In all other formats, the page break is represented using the
 form feed character.
 
+### Configuration
+
+The filter can be configured through the `pagebreak` metadata
+field. Currently supported options:
+
+- `pagebreak.break-on.form-feed`: boolean value indicating whether
+  the filter should replace paragraphs that contains nothing but
+  form feed characters with page breaks. Defaults to `true`.
+
+Example config in YAML frontmatter:
+
+``` yaml
+---
+pagebreak:
+  break-on:
+    # do not treat paragraphs that contain nothing but a form feed
+    # character as pagebreak markers.
+    form-feed: false
+---
+```
 
 ### Usage with HTML
 If you want to use an HTML class rather than an inline style set

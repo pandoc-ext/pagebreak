@@ -1,0 +1,9 @@
+input-files: [test/input.md]
+to: html5
+wrap: none
+metadata:
+  pagebreak:
+    break-on:
+      form-feed: false
+filters:
+  - pagebreak.lua

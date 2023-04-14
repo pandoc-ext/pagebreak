@@ -107,10 +107,14 @@ local function ascii_pagebreak (raw_pagebreak)
 end
 
 function Pandoc (doc)
-  local pagebreak = pagebreak_from_config(doc.meta)
-  local raw_pagebreak = newpage(FORMAT, pagebreak)
+  local config = doc.meta.pagebreak or {}
+  local break_on = config['break-on'] or {}
+  local raw_pagebreak = newpage(FORMAT, pagebreak_from_config(doc.meta))
   return doc:walk {
     RawBlock = latex_pagebreak(raw_pagebreak),
-    Para = ascii_pagebreak(raw_pagebreak)
+    -- Replace paragraphs that contain just a form feed char.
+    Para = (break_on['form-feed'] ~= false)
+      and ascii_pagebreak(raw_pagebreak)
+      or nil
   }
 end
