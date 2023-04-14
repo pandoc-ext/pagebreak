@@ -1,7 +1,7 @@
 --[[
 pagebreak – convert raw LaTeX page breaks to other formats
 
-Copyright © 2017-2021 Benct Philip Jonsson, Albert Krewinkel
+Copyright © 2017-2023 Benct Philip Jonsson, Albert Krewinkel
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -75,7 +75,7 @@ local function is_newpage_command(command)
 end
 
 -- Filter function called on each RawBlock element.
-function RawBlock (el)
+local function latex_pagebreak (el)
   -- Don't do anything if the output is TeX
   if FORMAT:match 'tex$' then
     return nil
@@ -93,13 +93,17 @@ end
 
 -- Turning paragraphs which contain nothing but a form feed
 -- characters into line breaks.
-function Para (el)
+local function ascii_pagebreak (el)
   if #el.content == 1 and el.content[1].text == '\f' then
     return newpage(FORMAT)
   end
 end
 
-return {
-  {Meta = pagebreaks_from_config},
-  {RawBlock = RawBlock, Para = Para}
-}
+function Pandoc (doc)
+  local meta = doc.meta
+  pagebreaks_from_config(meta)
+  return doc:walk {
+    RawBlock = latex_pagebreak,
+    Para = ascii_pagebreak
+  }
+end
