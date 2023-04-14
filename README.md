@@ -46,7 +46,7 @@ line option.
 ### Quarto / R Markdown
 
 The use of this filter with either Quarto or R Markdown is
-discouraged, as both systems ship with their own fork of this
+*discouraged*, as both systems ship with their own fork of this
 extension. Use those instead.
 
 Note also that Quarto allows to use the [`{{ pagebreak }}`

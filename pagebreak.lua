@@ -72,13 +72,16 @@ local function newpage(format, pagebreak)
   end
 end
 
+--- Checkes whether a the given string contains a LaTeX pagebreak or
+--- newpage command.
 local function is_newpage_command(command)
   return command:match '^\\newpage%{?%}?$'
     or command:match '^\\pagebreak%{?%}?$'
 end
 
 -- Returns a filter function for RawBlock elements, checking for LaTeX
--- pagebreak/newpage commands; returns `nil` when the target format is latex.
+-- pagebreak/newpage commands; returns `nil` when the target format is
+-- latex.
 local function latex_pagebreak (pagebreak)
   -- Don't do anything if the output is TeX
   if FORMAT:match 'tex$' then
@@ -107,6 +110,7 @@ local function ascii_pagebreak (raw_pagebreak)
   end
 end
 
+--- Filter function; this is the entrypoint when used as a filter.
 function Pandoc (doc)
   local config = doc.meta.pagebreak or {}
   local break_on = config['break-on'] or {}
