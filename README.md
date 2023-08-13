@@ -20,6 +20,7 @@ Fully supported output formats are:
 - Docx,
 - EPUB,
 - groff ms,
+- Typst
 - HTML, and
 - LaTeX.
 
