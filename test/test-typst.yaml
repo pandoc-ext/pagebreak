@@ -1,0 +1,9 @@
+input-files: [test/input.md]
+to: typst
+filters:
+  - pagebreak.lua
+
+metadata:
+  pagebreak:
+    break-on:
+      form-feed: true
