@@ -41,7 +41,7 @@ be used with many publishing systems that are based on pandoc.
 Pass the filter to pandoc via the `--lua-filter` (or `-L`) command
 line option.
 
-    pandoc --lua-filter abstract-section.lua ...
+    pandoc --lua-filter pagebreak.lua ...
 
 ### Quarto / R Markdown
 
