@@ -15,21 +15,25 @@ the following is sufficient:
 
 Fully supported output formats are:
 
-- AsciiDoc / Asciidoctor,
-- ConTeXt,
-- Docx,
-- EPUB,
-- groff ms,
+- AsciiDoc / Asciidoctor
+- ConTeXt
+- Docx
+- EPUB
+- groff ms
 - Typst
-- HTML, and
-- LaTeX.
+- HTML
+- LaTeX
 
 ODT is supported, but requires additional settings in the
-reference document (see below).
+reference document (Configuration).
 
 In all other formats, the page break is represented using the
 form feed character.
 
+Input support is enabled (by default) with: _markdown_ and _opml_ formats.  
+If you want to enable another input format, go to [raw_tex](https://pandoc.org/MANUAL.html#extension-raw_tex) and  
+hover over `±` to check which formats support the extension,  
+because this filter is based on that extension.  
 
 Usage
 -----
