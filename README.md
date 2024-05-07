@@ -30,10 +30,10 @@ reference document (Configuration).
 In all other formats, the page break is represented using the
 form feed character.
 
-Input support is enabled (by default) with: _markdown_ and _opml_ formats.  
-If you want to enable another input format, go to [raw_tex](https://pandoc.org/MANUAL.html#extension-raw_tex) and  
-hover over `±` to check which formats support the extension,  
-because this filter is based on that extension.  
+Note that not all input formats support the `raw_tex` format
+extension, which is required to use the filter in the default
+configuration. Enable the `break-on.plaintext-command` option to
+use this filter with if `raw_tex` is unavailable.
 
 Usage
 -----
@@ -74,6 +74,9 @@ pagebreak:
     # Treat paragraphs that contain just a form feed
     # character as pagebreak markers.
     form-feed: true
+    # Allow plaintext commands, i.e., respect LaTeX newpage
+    # commands even if they are not in a raw TeX block.
+    plaintext-command: true
 
   # Use a div with this class instead of hard-coded CSS
   html-class: 'page-break'
@@ -90,6 +93,11 @@ Currently supported options:
   form feed characters with page breaks. Enabling option can have
   a significant performance impact for large documents and is
   therefore *disabled by default*.
+
+- `break-on.plaintext-command`: boolean value that controls
+  whether paragraphs with LaTeX commands should be interpreted as
+  pagebreak markers. Enabling this option may impact performance,
+  so it is *disabled* by default.
 
 - `html-class`: If you want to use an HTML class rather than an
   inline style set the value of the metadata key `html-class` or
