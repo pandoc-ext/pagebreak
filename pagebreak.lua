@@ -103,11 +103,23 @@ local function latex_pagebreak (pagebreak)
   end
 end
 
--- Turning paragraphs which contain nothing but a form feed
--- characters into line breaks.
-local function ascii_pagebreak (raw_pagebreak)
-  return function (el)
-    if #el.content == 1 and el.content[1].text == '\f' then
+--- Checks if a paragraph contains nothing but a form feed character.
+local formfeed_check = function (para)
+  return #para.content == 1 and para.content[1].text == '\f'
+end
+
+--- Checks if a paragraph looks like a LaTeX newpage command.
+local function plaintext_check (para)
+  return #para.content == 1 and is_newpage_command(para.content[1].text)
+end
+
+--- Replaces a paragraph with a pagebreak if on of the `checks` returns true.
+local function para_pagebreak(raw_pagebreak, checks)
+  local is_pb = function (para)
+    return checks:find_if(function (pred) return pred(para) end)
+  end
+  return function (para)
+    if is_pb(para) then
       return raw_pagebreak
     end
   end
@@ -118,11 +130,18 @@ function Pandoc (doc)
   local config = doc.meta.pagebreak or {}
   local break_on = config['break-on'] or {}
   local raw_pagebreak = newpage(FORMAT, pagebreak_from_config(doc.meta))
+  local paragraph_checks = pandoc.List{}
+  if break_on['form-feed'] then
+    paragraph_checks:insert(formfeed_check)
+  end
+  if break_on['plaintext-command'] then
+    paragraph_checks:insert(plaintext_check)
+  end
   return doc:walk {
     RawBlock = latex_pagebreak(raw_pagebreak),
     -- Replace paragraphs that contain just a form feed char.
-    Para = break_on['form-feed']
-      and ascii_pagebreak(raw_pagebreak)
+    Para = #paragraph_checks > 0
+      and para_pagebreak(raw_pagebreak, paragraph_checks)
       or nil
   }
 end

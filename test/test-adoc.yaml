@@ -7,3 +7,4 @@ metadata:
   pagebreak:
     break-on:
       form-feed: true
+      plaintext-command: true
