@@ -137,6 +137,8 @@ function Pandoc (doc)
   if break_on['plaintext-command'] then
     paragraph_checks:insert(plaintext_check)
   end
+  -- unset pagebreak options field in the metadata
+  doc.meta.pagebreak = nil
   return doc:walk {
     RawBlock = latex_pagebreak(raw_pagebreak),
     -- Replace paragraphs that contain just a form feed char.
