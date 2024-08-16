@@ -1,9 +1,0 @@
-input-files: [test/input.md]
-to: ms
-filters:
-  - pagebreak.lua
-
-metadata:
-  pagebreak:
-    break-on:
-      form-feed: true
