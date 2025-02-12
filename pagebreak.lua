@@ -76,8 +76,12 @@ local function newpage(format, pagebreak)
 end
 
 --- Checks whether the given string contains a LaTeX pagebreak or
---- newpage command.
+--- newpage command. Returns false if commmand is nil
 local function is_newpage_command(command)
+  if not command then
+    return false
+  end
+
   return command:match '^\\newpage%{?%}?$'
     or command:match '^\\pagebreak%{?%}?$'
 end
