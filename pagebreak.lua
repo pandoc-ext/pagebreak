@@ -1,7 +1,7 @@
 --[[
 pagebreak – convert raw LaTeX page breaks to other formats
 
-Copyright © 2017-2024 Benct Philip Jonsson, Albert Krewinkel
+Copyright © 2017-2025 Benct Philip Jonsson, Albert Krewinkel
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -110,7 +110,8 @@ end
 
 --- Checks if a paragraph looks like a LaTeX newpage command.
 local function plaintext_check (para)
-  return #para.content == 1 and is_newpage_command(para.content[1].text)
+  return #para.content == 1 and para.content[1].t == 'Str' and
+    is_newpage_command(para.content[1].text)
 end
 
 --- Replaces a paragraph with a pagebreak if on of the `checks` returns true.
