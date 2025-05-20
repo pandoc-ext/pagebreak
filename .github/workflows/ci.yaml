@@ -27,7 +27,6 @@ jobs:
       fail-fast: true
       matrix:
         pandoc:
-          - edge
           - latest
           # The oldest version that's guaranteed to be supported
           - 2.17
