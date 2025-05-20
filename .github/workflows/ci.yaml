@@ -28,8 +28,11 @@ jobs:
       matrix:
         pandoc:
           - latest
-          # The oldest version that's guaranteed to be supported
-          - 2.17
+          # The oldest version that's guaranteed to be supported.
+          # Older versions down to 2.17 should work, too, but aren't
+          # tested, as there have been syntax changes in the generated
+          # output.
+          - 3.7.0.1
 
     container:
       image: pandoc/core:${{ matrix.pandoc }}

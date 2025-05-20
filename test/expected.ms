@@ -17,7 +17,7 @@ Suspendisse potenti.
 The following does not mark a pagebreak unless the interpretation of
 LaTeX commands in plain paragraphs is enabled.
 .PP
-\[rs]pagebreak
+\(rspagebreak
 .PP
 Cum sociis natoque penatibus et magnis dis parturient montes, nascetur
 ridiculus mus.
