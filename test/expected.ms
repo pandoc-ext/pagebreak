@@ -22,4 +22,8 @@ LaTeX commands in plain paragraphs is enabled.
 Cum sociis natoque penatibus et magnis dis parturient montes, nascetur
 ridiculus mus.
 .PP
-Final paragraph without a preceding pagebreak.
+Another paragraph without a preceding pagebreak.
+.PP
+This should not generate a pagebreak: \f[CR]\f[R].
+.PP
+Did it?

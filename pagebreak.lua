@@ -105,7 +105,8 @@ end
 
 --- Checks if a paragraph contains nothing but a form feed character.
 local formfeed_check = function (para)
-  return #para.content == 1 and para.content[1].text == '\f'
+  return #para.content == 1 and para.content[1].t == 'Str' and
+    para.content[1].text == '\f'
 end
 
 --- Checks if a paragraph looks like a LaTeX newpage command.
